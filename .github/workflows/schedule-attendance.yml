@@ -1,0 +1,59 @@
+name: Schedule Attendance Marking
+
+on:
+  schedule:
+    - cron: '0 13 * * 2-6' # Monday to Friday at 08:00 Lima (13:00 UTC) → In
+    - cron: '0 0 * * 2-5'  # Monday to Thursday at 19:00 Lima (00:00 UTC) → Out
+    - cron: '0 22 * * 6'   # Friday at 17:00 Lima (22:00 UTC) → Out
+  workflow_dispatch: # Allows manual execution
+
+jobs:
+  set-attendance-type:
+    runs-on: ubuntu-latest
+    outputs:
+      attendance_type: ${{ steps.set-type.outputs.ATTENDANCE_TYPE }}
+    
+    steps:
+      # Determine the attendance type based on the current UTC hour
+      - name: Determine attendance type
+        id: set-type
+        run: |
+          HOUR_UTC=$(date -u +%H)
+          if [[ "$HOUR_UTC" -lt 18 ]]; then
+            echo "ATTENDANCE_TYPE=In" >> $GITHUB_OUTPUT
+          else
+            echo "ATTENDANCE_TYPE=Out" >> $GITHUB_OUTPUT
+          fi
+
+  mark-attendance:
+    runs-on: ubuntu-latest
+    needs: set-attendance-type
+
+    steps:
+      # Checkout the repository to use this private action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Chrome browser, ChromeDriver, and dependencies 
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+          install-dependencies: true
+
+      # Use the custom javascript action to mark attendance based on the determined type
+      - name: Mark Attendance
+        uses: cbecerrae/talana-attendance-javascript-action@v1
+        id: mark-attendance
+        with:
+          attendance_email: ${{ secrets.ATTENDANCE_EMAIL }}
+          attendance_password: ${{ secrets.ATTENDANCE_PASSWORD }}
+          attendance_type: ${{ needs.set-attendance-type.outputs.attendance_type }}
+          chrome_path: ${{ steps.setup-chrome.outputs.chrome-path }}
+          chromedriver_path: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+      
+      # Confirm the attendance marking and output the attendance type and time 
+      - name: Confirm Attendance
+        run: echo "Attendance of type '${{ needs.set-attendance-type.outputs.attendance_type }}' marked at time ${{ steps.mark-attendance.outputs.attendance_time }}"

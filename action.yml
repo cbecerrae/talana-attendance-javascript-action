@@ -1,0 +1,29 @@
+name: 'Talana Attendance JavaScript Action'
+description: 'This GitHub Action automates attendance marking in Talana by interacting with the platform using Node.js and Selenium.'
+inputs:
+  attendance_email:
+    description: 'User email for authentication'
+    required: true
+  attendance_password:
+    description: 'User password for authentication'
+    required: true
+  attendance_type:
+    description: 'Attendance type: In or Out'
+    required: true
+  chrome_path:
+    description: 'Path to the installed Chrome binary'
+    required: true
+  chromedriver_path:
+    description: 'Path to the installed ChromeDriver binary'
+    required: true
+outputs:
+  attendance_time:
+    description: 'The time when the attendance was marked'
+
+runs:
+  using: 'node20'
+  main: 'index.js'
+
+branding:
+  icon: 'clock'
+  color: 'green'

@@ -1,0 +1,21 @@
+{
+  "name": "talana-attendance-javascript-action",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@actions/core": "1.11.1",
+    "log4js": "6.9.1",
+    "selenium-webdriver": "4.29.0"
+  },
+  "keywords": [
+    "selenium",
+    "javascript",
+    "github actions"
+  ],
+  "author": "Cristhian Alonzo Becerra Espinoza",
+  "license": "MIT",
+  "description": "GitHub Action to automate attendance marking for Talana platform using Selenium."
+}
