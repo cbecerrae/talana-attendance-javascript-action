@@ -29,7 +29,7 @@ async function clickMarkAttendance(driver) {
     // Click the mark attendance button
     logger.info("Clicking the mark attendance button.");
 
-    await click(driver, By.xpath('//p[text()="Turnos y marcas"]/..//button')); // Click the mark attendance button
+    await click(driver, By.xpath('//button[@data-cy="pdt-mark-attendance"]')); // Click the mark attendance button
 
     logger.info("Mark attendance button clicked successfully.");
 }
@@ -48,12 +48,12 @@ async function clickMarkTypeSelector(driver, markType) {
     // Click the mark type selector and select the specified mark type
     logger.info(`Entering the mark type "${markType}".`);
 
-    await click(driver, By.xpath('//div[text()="Marca"]/..')); // Click the mark type selector
+    await click(driver, By.xpath('//input[@placeholder="Marca"]')); // Click the mark type selector
 
     if (markType === "In") {
-        await click(driver, By.xpath('//div[text()="Entrada"]')); // Select the "In" mark type
+        await click(driver, By.xpath('//span[text()="Entrada"]')); // Select the "In" mark type
     } else if (markType === "Out") {
-        await click(driver, By.xpath('//div[text()="Salida"]')); // Select the "Out" mark type
+        await click(driver, By.xpath('//span[text()="Salida"]')); // Select the "Out" mark type
     }
 
     logger.info(`Mark type "${markType}" entered successfully.`);
@@ -70,7 +70,7 @@ async function finishMarkAttendance(driver) {
     // Click the finish mark button
     logger.info("Clicking the finish mark button.");
 
-    await click(driver, By.xpath('//span[text()="Marcar"]/../../..')); // Click the finish mark button
+    await click(driver, By.xpath('//button[@data-cy="pdt-mark-confirmMarkAttendance"]')); // Click the finish mark button
 
     logger.info("Finish mark button clicked successfully.");
 }

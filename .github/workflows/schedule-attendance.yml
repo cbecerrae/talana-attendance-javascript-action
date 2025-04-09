@@ -45,7 +45,7 @@ jobs:
 
       # Use the custom javascript action to mark attendance based on the determined type
       - name: Mark Attendance
-        uses: cbecerrae/talana-attendance-javascript-action@v1
+        uses: cbecerrae/talana-attendance-javascript-action@v2
         id: mark-attendance
         with:
           attendance_email: ${{ secrets.ATTENDANCE_EMAIL }}
